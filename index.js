@@ -13,6 +13,9 @@ app.use(cors({
     origin: [REACT_BASE_URL],
     credentials: true,
 }));
+app.use("/", (req, res) => {
+    res.json({ message: "helloooooo" });
+});
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -39,7 +42,7 @@ const verifyUser = (req, res, next) => {
 };
 
 const sessionRoute = (req, res) => {
-    res.header('Access-Control-Allow-Origin',   );
+    res.header('Access-Control-Allow-Origin',);
     res.header('Access-Control-Allow-Credentials', true);
     res.json({ Status: 'Success', name: req.name });
 };
