@@ -13,9 +13,7 @@ app.use(cors({
     origin: [REACT_BASE_URL],
     credentials: true,
 }));
-app.use("/", (req, res) => {
-    res.json({ message: "helloooooo" });
-});
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -24,6 +22,9 @@ app.use(authRoute);
 app.use(masterRoute)
 app.use("/uploads", express.static("./uploads"))
 
+app.get("/demo", (req, res) => {
+    res.json({ message: "helloooooo" });
+});
 const verifyUser = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
