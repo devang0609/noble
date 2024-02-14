@@ -1,0 +1,269 @@
+
+import React from 'react'
+import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Swal from "sweetalert2";
+
+function Student() {
+
+    const [data, setData] = useState([])
+    const [branch, setBranch] = useState([])
+    const [board, setBoard] = useState([])
+    const [medium, setMedium] = useState([])
+    const [standard, setStandard] = useState([])
+    const [batch, setBatch] = useState([])
+
+    const getStudentData = () => {
+        axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/student`)
+            .then(res => setData(res.data))
+            .catch(err => console.log(err))
+    }
+
+
+
+
+
+    const getBranchData = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/branch`);
+            if (res.status === 200) {
+                setBranch(res.data);
+            } else {
+                setBranch([]);
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: "something went wrong",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#06bdff",
+            });
+        }
+    };
+    const getBoardData = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/board`);
+
+            if (res.status === 200) {
+                setBoard(res.data);
+            } else {
+                setBoard([]);
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: "something went wrong",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#06bdff",
+            });
+        }
+    };
+    const getMediumData = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/medium`);
+
+            if (res.status === 200) {
+                setMedium(res.data);
+            } else {
+                setMedium([]);
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: "something went wrong",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#06bdff",
+            });
+        }
+    };
+    const getStandardData = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/standerd`);
+
+            if (res.status === 200) {
+                setStandard(res.data);
+            } else {
+                setStandard([]);
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: "something went wrong",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#06bdff",
+            });
+        }
+    };
+    const getBatchData = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/batch`);
+
+            if (res.status === 200) {
+                setBatch(res.data);
+            } else {
+                setBatch([]);
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: "something went wrong",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#06bdff",
+            });
+        }
+    };
+
+
+
+
+
+    useEffect(() => {
+        getStudentData();
+        getBranchData();
+        getBoardData();
+        getMediumData();
+        getStandardData();
+        getBatchData();
+    }, [])
+
+
+    const handleDelete = async (id) => {
+        try {
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'You will be delete this Student',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#5000C0',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            });
+            if (result.isConfirmed) {
+                const res = await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/student/delete/` + id);
+                if (res.status === 200) {
+                    getStudentData()
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'This Student has been deleted.',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Deleted failed!',
+                        text: 'Student deleted failed.',
+                        icon: 'error',
+                    });
+                }
+            }
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+            });
+        }
+    };
+
+
+    const getBranchNameById = (branchID) => {
+        const foundBranch = branch.find((branch) => branch.id === branchID);
+        return foundBranch ? foundBranch.name : 'Unknown Branch';
+    }
+    const getBoardNameById = (boardID) => {
+        const foundBoard = board.find((board) => board.id === boardID);
+        return foundBoard ? foundBoard.board : 'Unknown Board';
+    }
+    const getMediumNameById = (m_Id) => {
+        const foundMedium = medium.find((medium) => medium.id === m_Id);
+        return foundMedium ? foundMedium.medium : 'Unknown medium';
+    };
+    const getStandardNameById = (standardId) => {
+        const foundStandard = standard.find((standard) => standard.id === standardId);
+        return foundStandard ? foundStandard.standard : 'Unknown standard';
+    };
+    const getBatchNameById = (batchId) => {
+        const foundBatch = batch.find((batch) => batch.id === batchId);
+        return foundBatch ? foundBatch.name : 'Unknown batch';
+    };
+
+    const handleimg = (e) => {
+        e.target.src = "assets/img/imgnot.png"
+        e.target.alt = 'Image not found'
+    }
+
+    return (
+        <>
+            <div className="page-wrapper page-settings">
+                <div className="content">
+                    <div className="content-page-header content-page-headersplit">
+                        <h5>Students</h5>
+                        <div className="list-btn">
+                            <ul>
+                                <li>
+                                    <Link to={'/createstudent'} className="btn btn-primary"><i className="fa fa-plus me-2"></i>Create</Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 ">
+                            <div className="table-resposnive">
+                                <table className="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>Index</th>
+                                            <th>Profile</th>
+                                            <th>Student</th>
+                                            <th>Branch</th>
+                                            <th>Board</th>
+                                            <th>Medium</th>
+                                            <th>Standard</th>
+                                            <th>Batch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {data.map((dataa, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td style={{ paddingLeft: '19px' }}><img src={`${process.env.REACT_APP_BACKEND_BASE_URL}/uploads/${dataa.photo}`} style={{ width: '45px', height: '45px', borderRadius: "50%", margin: '5px 0' }} onError={handleimg} /></td>
+                                                <td>{dataa.name}</td>
+                                                <td>{getBranchNameById(dataa.id_branch)}</td>
+                                                <td>{getBoardNameById(dataa.id_board)}</td>
+                                                <td>{getMediumNameById(dataa.id_medium)}</td>
+                                                <td>{getStandardNameById(dataa.id_standard)}</td>
+                                                <td>{getBatchNameById(dataa.id_batch)}</td>
+                                                <td>
+                                                    <div className="table-actions d-flex">
+                                                        <Link className="delete-table me-2" to={`/studentdetails/${dataa.id}`}><i class="fa-solid fa-eye"></i></Link>
+                                                        <Link className="delete-table me-2" to={`/editstudent/${dataa.id}`}> <i className="fas fa-edit"></i> </Link>
+                                                        <div className="delete-table" onClick={() => handleDelete(dataa.id)}><img src="assets/img/icons/delete.svg" alt="svg" /></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
+export default Student;
