@@ -23,7 +23,12 @@ app.use(masterRoute)
 app.use("/uploads", express.static("./uploads"))
 
 app.get("/demo", (req, res) => {
-    res.json({ message: "helloooooo" });
+    // res.json({ message: "helloooooo" });
+    const sql = "SELECT * FROM books";
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Erorr inside server" });
+        return res.json(result);
+    })
 });
 app.get("/book", (req, res) => {
     try {
