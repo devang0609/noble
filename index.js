@@ -25,6 +25,21 @@ app.use("/uploads", express.static("./uploads"))
 app.get("/demo", (req, res) => {
     res.json({ message: "helloooooo" });
 });
+app.get("/book", (req, res) => {
+    try {
+        const sql = "SELECT * FROM books";
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.error("Error in material query:", err);
+                return res.status(500).json({ Message: "Internal Server Error" });
+            }
+            return res.status(200).json(result);
+        });
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        return res.status(500).json({ Message: "Internal Server Error" });
+    }
+});
 const verifyUser = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
