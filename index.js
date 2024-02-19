@@ -3,7 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken');
 const { PORT, REACT_BASE_URL } = require("./config/envConfig");
-const db = require('./db/connection')
+const pool = require('./db/connection')
 const adminRoute = require("./routes/adminRoutes")
 const authRoute = require("./routes/authRoutes")
 const masterRoute = require("./routes/masterRoutes")
@@ -25,7 +25,7 @@ app.use("/uploads", express.static("./uploads"))
 app.get("/demo", (req, res) => {
     // res.json({ message: "helloooooo" });
     const sql = "SELECT * FROM books";
-    db.query(sql, (err, result) => {
+    pool.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Erorr inside server" });
         return res.json(result);
     })
@@ -33,7 +33,7 @@ app.get("/demo", (req, res) => {
 app.get("/book", (req, res) => {
     try {
         const sql = "SELECT * FROM books";
-        db.query(sql, (err, result) => {
+        pool.query(sql, (err, result) => {
             if (err) {
                 console.error("Error in material query:", err);
                 return res.status(500).json({ Message: "Internal Server Error" });
